@@ -84,12 +84,11 @@ namespace DataAccess.Repositories
                 poll.Option3VotesCount++;
             }
             else
+            {
                 return;
             }
 
             await _context.SaveChangesAsync();
         }
-
-
     }
 }
