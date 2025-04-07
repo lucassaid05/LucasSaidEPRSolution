@@ -66,5 +66,30 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task Vote(int pollId, int selectedOption)
+        {
+            var poll = await _context.Polls.FindAsync(pollId);
+            if (poll == null) return;
+
+            if (selectedOption == 1)
+            {
+                poll.Option1VotesCount++;
+            }
+            else if (selectedOption == 2)
+            {
+                poll.Option2VotesCount++;
+            }
+            else if (selectedOption == 3)
+            {
+                poll.Option3VotesCount++;
+            }
+            else
+                return;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

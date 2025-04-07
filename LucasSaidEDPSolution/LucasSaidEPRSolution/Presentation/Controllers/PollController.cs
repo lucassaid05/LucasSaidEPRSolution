@@ -49,5 +49,13 @@ namespace Presentation.Controllers
 
             return View(poll);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Vote(int id, int selectedOption)
+        {
+            await _pollRepository.Vote(id, selectedOption);
+            return RedirectToAction("Index");
+        }
+
     }
 }
