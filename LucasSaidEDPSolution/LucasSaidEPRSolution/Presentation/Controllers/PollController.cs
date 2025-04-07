@@ -37,5 +37,17 @@ namespace Presentation.Controllers
             return View(polls);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var polls = await _pollRepository.GetPolls();
+            var poll = polls.FirstOrDefault(p => p.Id == id);
+
+            if (poll == null)
+            {
+                return NotFound();
+            }
+
+            return View(poll);
+        }
     }
 }
