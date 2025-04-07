@@ -2,22 +2,18 @@
 using DataAccess.Repositories;
 using Domain.Model;
 
-
 namespace Presentation.Controllers
 {
     public class PollController : Controller
     {
-        private readonly PollRepository _pollRepository;
+        private readonly IPollRepository _pollRepository;
 
-        public PollController(PollRepository pollRepository)
+        public PollController(IPollRepository pollRepository)
         {
             _pollRepository = pollRepository;
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [HttpPost]
         public async Task<IActionResult> Create(PollCreationModel pollModel)
@@ -27,7 +23,6 @@ namespace Presentation.Controllers
                 await _pollRepository.CreatePoll(pollModel);
                 return RedirectToAction("Index");
             }
-
             return View(pollModel);
         }
 
@@ -39,14 +34,8 @@ namespace Presentation.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var polls = await _pollRepository.GetPolls();
-            var poll = polls.FirstOrDefault(p => p.Id == id);
-
-            if (poll == null)
-            {
-                return NotFound();
-            }
-
+            var poll = await _pollRepository.GetPollByIdAsync(id);
+            if (poll == null) return NotFound();
             return View(poll);
         }
 
@@ -56,6 +45,5 @@ namespace Presentation.Controllers
             await _pollRepository.Vote(id, selectedOption);
             return RedirectToAction("Index");
         }
-
     }
 }
