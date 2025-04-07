@@ -1,0 +1,84 @@
+﻿@model Domain.Model.Poll
+
+@{
+    ViewData["Title"] = "Poll Details";
+}
+
+<h2>@Model.Title</h2>
+
+<div>
+    <p><strong>@Model.Option1Text:</strong> @Model.Option1VotesCount votes</p>
+    <p><strong>@Model.Option2Text:</strong> @Model.Option2VotesCount votes</p>
+    <p><strong>@Model.Option3Text:</strong> @Model.Option3VotesCount votes</p>
+</div>
+
+<form asp-action="Vote" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <div>
+        <label>
+            <input type="radio" name="selectedOption" value="1" required />
+            @Model.Option1Text (@Model.Option1VotesCount votes)        </label>
+    </div>
+
+    <div>
+        <label>
+            <input type="radio" name="selectedOption" value="2" />
+        </label>
+    </div>
+
+    <div>
+        <label>
+            <input type="radio" name="selectedOption" value="3" />
+        </label>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Submit Vote</button>
+</form>
+
+<canvas id="voteChart" width="400" height="200"></canvas>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('voteChart').getContext('2d');
+        const voteChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    '@Model.Option1Text',
+                    '@Model.Option2Text',
+                    '@Model.Option3Text'
+                ],
+                datasets: [{
+                    label: 'Votes',
+                    data: [
+        @Model.Option1VotesCount,
+        @Model.Option2VotesCount,
+        @Model.Option3VotesCount
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+    </script>
+}

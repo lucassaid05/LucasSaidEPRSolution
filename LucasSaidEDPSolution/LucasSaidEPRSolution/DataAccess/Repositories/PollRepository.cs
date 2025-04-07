@@ -8,6 +8,11 @@ namespace DataAccess.Repositories
     {
         private readonly PollDbContext _context;
 
+        public PollRepository(PollDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task CreatePoll(PollCreationModel pollModel)
         {
             var poll = new Poll
