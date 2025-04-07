@@ -30,5 +30,12 @@ namespace Presentation.Controllers
 
             return View(pollModel);
         }
+
+        public async Task<IActionResult> Index()
+        {
+            var polls = await _pollRepository.GetPolls();
+            return View(polls);
+        }
+
     }
 }

@@ -14,11 +14,6 @@ namespace DataAccess.Repositories
     {
         private readonly PollDbContext _context;
 
-        PollRepository(PollDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task CreatePoll(string title, string option1Text, string option2Text, string option3Text)
         {
             var poll = new Poll
@@ -64,5 +59,12 @@ namespace DataAccess.Repositories
             await _context.Polls.AddAsync(poll);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Poll>> GetPolls()
+        {
+            return await _context.Polls
+                .OrderByDescending(p => p.DateCreated)
+                .ToListAsync();
+        }
+
     }
 }
