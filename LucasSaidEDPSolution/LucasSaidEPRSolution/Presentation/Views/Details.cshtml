@@ -7,7 +7,7 @@
 
     <form method="post" asp-action="Vote" asp-route-id="@Model.Id">
         <div>
-            <input type="radio" name="selectedOption" value="1" id="option1" />
+            <input type="radio" name="selectedOption" value="1" id="option1" required />
             <label for="option1">@Model.Option1Text</label>
         </div>
         <div>
@@ -21,4 +21,5 @@
 
         <button type="submit">Submit Vote</button>
     </form>
+
 </div>
