@@ -1,14 +1,9 @@
 ﻿using Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class PollFileRepository
+    public class PollFileRepository : IPollRepository
     {
         private readonly string _filePath = "polls.json";
 
@@ -30,7 +25,6 @@ namespace DataAccess.Repositories
             };
 
             polls.Add(newPoll);
-
             var json = JsonSerializer.Serialize(polls, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(_filePath, json);
         }
@@ -38,14 +32,35 @@ namespace DataAccess.Repositories
         public async Task<List<Poll>> GetPolls()
         {
             if (!File.Exists(_filePath))
-            {
                 return new List<Poll>();
-            }
 
             var json = await File.ReadAllTextAsync(_filePath);
-            var polls = JsonSerializer.Deserialize<List<Poll>>(json);
+            return JsonSerializer.Deserialize<List<Poll>>(json) ?? new List<Poll>();
+        }
 
-            return polls ?? new List<Poll>();
+        public async Task<Poll> GetPollByIdAsync(int id)
+        {
+            var polls = await GetPolls();
+            return polls.FirstOrDefault(p => p.Id == id);
+        }
+
+        public async Task Vote(int pollId, int selectedOption)
+        {
+            var polls = await GetPolls();
+            var poll = polls.FirstOrDefault(p => p.Id == pollId);
+            if (poll == null) return;
+
+            if (selectedOption == 1)
+                poll.Option1VotesCount++;
+            else if (selectedOption == 2)
+                poll.Option2VotesCount++;
+            else if (selectedOption == 3)
+                poll.Option3VotesCount++;
+            else
+                return;
+
+            var json = JsonSerializer.Serialize(polls, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(_filePath, json);
         }
     }
 }
