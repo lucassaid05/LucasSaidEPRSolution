@@ -1,0 +1,16 @@
+﻿@model List<Domain.Model.Poll>
+
+<h2>Available Polls</h2>
+
+<a asp-action="Create" class="btn btn-primary" style="margin-bottom: 20px;">+ Create New Poll</a>
+
+<ul>
+    @foreach (var poll in Model)
+    {
+        <li>
+            <strong>@poll.Title</strong> - @poll.DateCreated.ToString("g")
+            <br />
+            <a asp-action="Details" asp-route-id="@poll.Id">Vote Now</a>
+        </li>
+    }
+</ul>

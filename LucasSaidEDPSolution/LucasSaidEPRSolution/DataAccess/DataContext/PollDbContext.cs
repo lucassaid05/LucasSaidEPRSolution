@@ -1,15 +1,9 @@
 ﻿using Domain.Model;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.DataContext
 {
-    internal class PollDbContext : DbContext
+    public class PollDbContext : DbContext
     {
         public PollDbContext(DbContextOptions<PollDbContext> options) : base(options)
         {
@@ -19,6 +13,8 @@ namespace DataAccess.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Poll>()
                 .HasKey(p => p.Id);
 
