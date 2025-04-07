@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Model
 {
-    internal class PollCreationModel
+    public class PollCreationModel
     {
         public string Title { get; set; }
         public string Option1Text { get; set; }
