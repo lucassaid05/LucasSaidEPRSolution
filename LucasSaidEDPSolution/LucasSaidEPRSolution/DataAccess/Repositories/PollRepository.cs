@@ -10,11 +10,11 @@ using System.Xml.Serialization;
 
 namespace DataAccess.Repositories
 {
-    internal class PollRepository
+    public class PollRepository
     {
         private readonly PollDbContext _context;
 
-        public PollRepository(PollDbContext context)
+        PollRepository(PollDbContext context)
         {
             _context = context;
         }
@@ -45,6 +45,24 @@ namespace DataAccess.Repositories
         public async Task<List<Poll>> GetAllPollsAsync()
         {
             return await _context.Polls.ToListAsync();
+        }
+
+        public async Task CreatePoll(PollCreationModel pollModel)
+        {
+            var poll = new Poll
+            {
+                Title = pollModel.Title,
+                Option1Text = pollModel.Option1Text,
+                Option2Text = pollModel.Option2Text,
+                Option3Text = pollModel.Option3Text,
+                Option1VotesCount = 0,
+                Option2VotesCount = 0,
+                Option3VotesCount = 0,
+                DateCreated = DateTime.UtcNow
+            };
+
+            await _context.Polls.AddAsync(poll);
+            await _context.SaveChangesAsync();
         }
     }
 }
